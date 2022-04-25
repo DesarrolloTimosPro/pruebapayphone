@@ -26,10 +26,10 @@
     }
     </style>
     <script>
-        var token="nSEoOvW51YPfsEGmpsu8BoSyIFTaqsGCyN8kkeOvMspw66GwExTguUV_Rcp7iD7MjYG2TCas8GpE7BgxG7gE3kFvNOAM7D75PuywWmvG_c8z2fARbd9DLFOubRbrL9BXt10GDDxQsiLRU3VvyiQtFgBeBYG9cO1wJer3Mq55LKrDtSBBnahqUmoKGdGD-YcNl3aX6YT4O3dngee36BGQLST5r6xjYQp9SZajKgtCCixS5CFIHeaH0h3g1KAqtCjBjcslT1LU-7pgZP09_084SW2iXguVE3QtUKjAGJ_jGXpjXU4pABOM8fde-TyRemyeC7534Q";//Colocar su token     
+        var token="PRIe9i6pMeq0EXjEyw1jbNXUv21eD0hnLCGmKRRfH3NufVIP2ADCiZOx-ZUIvNbQ9fdUboPPHZhBqohs2Zu9crIRroIgtu1SMn-iWa38pIqOLlz8IBix85XD8HSnKf5RodO525gySNuHDVFd7_aF349XOrHgyp0O-XUaHHS3OuW8PFGEH5uiSxzgnErxb6WzhV-YC9pjmhpMcYVyz-8cMvAPE1R-uhxO2cG8WNUmhJSQboTChFGrA8EV7jNxBsMuoPdPLdRfKbvfpap3FLQ5MLdFThoZ3HvEC0neDK7daB3RHHc-jIdAyilIF01Ab_z2WBRZBQ";//Colocar su token     
     </script>
     <!--/*colocar su identificador para el Metodo Express Checkout */-->
-    <script src="https://pay.payphonetodoesposible.com/api/button/js?appId=iB1grUKucEOpI1Et62EvBg"></script>
+    <script src="https://pay.payphonetodoesposible.com/api/button/js?appId=5RV0DtoyEqsDgXttfOnGg"></script>
     
 </head>
 <body>
@@ -52,8 +52,8 @@
                 amount: numero1*100,
                 amountWithoutTax: numero1*100,
                 clientTransactionId: transaccion,
-                responseUrl: "https://www.timospro.com/pagos-online",//cambiar a su url
-                cancellationUrl: "https://www.timospro.com/pagos-online"//cambiar a su url
+                responseUrl: "https://desarrollotimospro.github.io/pruebapayphone/",//cambiar a su url
+                cancellationUrl: "https://desarrollotimospro.github.io/pruebapayphone/"//cambiar a su url
             };
             $.ajax({
                 data: dataJson,
