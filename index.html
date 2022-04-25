@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Inicio</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <style>
+    .Buttom{ 
+        width: 150px;
+    border: 1px solid rgb(243, 128, 6);
+    background: orange;
+    text-align: center;
+    padding: 5px;
+    border-radius: 8px;
+    color: papayawhip ;
+    }
+    .buttom_redireccion{ 
+        font-family: "Roboto", Sans-serif !important;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        background-color: #50e3c2;
+        border-radius: 0px 0px 0px 0px;
+        padding: 17px 35px 17px 35px;
+    }
+    </style>
+    <script>
+        var token="nSEoOvW51YPfsEGmpsu8BoSyIFTaqsGCyN8kkeOvMspw66GwExTguUV_Rcp7iD7MjYG2TCas8GpE7BgxG7gE3kFvNOAM7D75PuywWmvG_c8z2fARbd9DLFOubRbrL9BXt10GDDxQsiLRU3VvyiQtFgBeBYG9cO1wJer3Mq55LKrDtSBBnahqUmoKGdGD-YcNl3aX6YT4O3dngee36BGQLST5r6xjYQp9SZajKgtCCixS5CFIHeaH0h3g1KAqtCjBjcslT1LU-7pgZP09_084SW2iXguVE3QtUKjAGJ_jGXpjXU4pABOM8fde-TyRemyeC7534Q";//Colocar su token     
+    </script>
+    <!--/*colocar su identificador para el Metodo Express Checkout */-->
+    <script src="https://pay.payphonetodoesposible.com/api/button/js?appId=iB1grUKucEOpI1Et62EvBg"></script>
+    
+</head>
+<body>
+    <h3>Valor total a Pagar</h3>
+    <span>Monto: $</span>
+    <label id="num1">2.00</label><!--/*valor que obtiene de la venta total*/-->
+    <br>
+    <h1>PayPhone Por redireccionamiento</h1>
+    <a href="#" onclick="buttomPrepare(15)" class="Buttom">Pagar con PayPhone</a>
+    <!--/*Metodo Por redireccionamiento */-->
+    <!--/*##############################Su Codigo ##################################*/-->
+    <script type='text/javascript'>
+        function buttomPrepare(numero1) {
+            var transacion;
+            //numero1 = document.getElementById("num1").innerHTML;
+            
+            transaccion =Date.now();//creo un id de transaccion random
+            console.log(transaccion);
+            var dataJson = {
+                amount: numero1*100,
+                amountWithoutTax: numero1*100,
+                clientTransactionId: transaccion,
+                responseUrl: "https://www.timospro.com/pagos-online",//cambiar a su url
+                cancellationUrl: "https://www.timospro.com/pagos-online"//cambiar a su url
+            };
+            $.ajax({
+                data: dataJson,
+                url: 'https://pay.payphonetodoesposible.com/api/button/Prepare',
+                type: 'POST',
+                beforeSend:function(xhr){
+                    xhr.setRequestHeader ('Authorization','bearer '+token )
+                },
+                success: function SolicitarPago(respuesta){
+                    location.href = respuesta.payWithCard;
+                }, error: function(respuesta){
+                    alert ("error en la llamada:" + JSON.stringify(respuesta));
+                }
+            });
+        }
+    </script>  
+    
+    <h1>PayPhone Express Checkout</h1>
+    <!--/*Metodo Express Checkout */-->
+    <!--/*##############################Codigo Necesario ##################################*/-->
+	<script>
+        var monto,clientTransaccion;
+            monto = document.getElementById("num1").innerHTML;
+            //clientTransaccion = document.getElementById("transaccion").innerHTML;
+            clientTransaccion =Math.random() *100*Math.random()*100;//creo un id de transaccion random
+
+		window.onload = function() {
+		payphone.Button({
+
+		//token obtenido desde la consola de developer
+		token: token,
+
+		//PARÁMETROS DE CONFIGURACIÓN
+		btnHorizontal: true,
+        btnCard: true,
+
+		createOrder: function(actions){
+
+		//Se ingresan los datos de la transaccion ej. monto
+		return actions.prepare({
+       // debe cumplir la siguiente regla Amount = amountWithoutTax + AmountWithTax + AmountWithTax + Tax + service + tip
+		amount: monto*100,// monto total de venta en etero $1 es 1*100
+		amountWithoutTax: monto*100, //monto total que no cobra iva
+        amountWithTax:0,//monto total que cobra iva
+        tax: 0,//monto del iva
+        service: 0,//si cobra montos de servicio
+        tip:0,//si cobra montos de propina
+        //storeId:"", Si dispone de mas de una tienda y quiere diferenciar la tienda de venta
+		currency: "USD",
+		clientTransactionId: clientTransaccion, ////id unico debe cambiar para cada transaccion
+        responseUrl: "http://localhost/ButtomBasic/confirm.html",//cambiar a su url
+        cancellationUrl: "http://localhost/ButtomBasic/BotonPago.html"//cambiar a su url
+		});
+
+		},
+		onComplete: function(model, actions){
+
+		//Se confirma el pago realizado
+		actions.confirm({
+		id: model.id,
+		clientTxId: model.clientTxId
+		}).then(function(value){
+
+		//EN ESTA SECCIÓN SE PROCESA LA RESPUESTA CON LOS DATOS DE RESPUESTA                                   
+
+		  if (value.statusCode==3){
+                alert('Orden# '+value.clientTransactionId+
+                '\n Codigo de Autorización : '+value.authorizationCode+
+                '\n Moneda :'+value.currency+
+                '\n Monto Total : $'+(value.amount/100).toFixed(2)+
+                '\n Referencia : '+value.reference+
+                '\n Medio de Pago : '+value.cardBrand+
+                '\n Id Transaccion :' + value.transactionId + 
+                '\n Estado :' + value.transactionStatus 
+                );
+              location.reload();
+            }else{
+                alert('Orden# '+value.clientTransactionId+
+                '\n Codigo de Autorización : '+value.authorizationCode+
+                '\n Moneda :'+value.currency+
+                '\n Monto Total : $'+(value.amount/100).toFixed(2)+
+                '\n Referencia : '+value.reference+
+                '\n Medio de Pago : '+value.cardBrand+
+                '\n Id Transaccion : ' + value.transactionId + 
+                '\n Estado : ' + value.transactionStatus +
+                '\n Hubo un problema su transaccion fue : '+value.message
+                );
+              location.reload();
+		  }
+		}).catch(function(err){
+            alert(err);
+            location.reload();
+		  console.log(err);
+		});
+
+		}
+		}).render('#pp-button');
+
+		}
+	</script>	
+	<div id="pp-button"></div>
+
+    <div class="elementor-price-table__footer">
+        <a class="elementor-price-table__button elementor-button elementor-size-md" onclick="buttomPrepare()">Registra tu Pago</a>
+    </div>
+
+    <br>
+   <a href="index.php"><h1>Ver Ejemplo Buttom Prepare</h1></a>
+</body>
+</html>
