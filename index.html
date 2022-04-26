@@ -547,6 +547,17 @@
     tax = (+(((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador).toFixed(2))) * 100;
     amount = (+(((totales_productos.reduce((a, b) => a + b, 0)) + ((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador)).toFixed(2))) * 100;
     //console.log(amount);console.log(amountWithTax);console.log(tax);
+    payphone.Button.createOrder= function (actions) {
+          return actions.prepare({       
+            amount: amount,
+            amountWithTax: amountWithTax,
+            tax: tax,
+            currency: "USD",
+            clientTransactionId: transaccionid,
+            responseUrl: responseUrl,
+            cancellationUrl: cancellationUrl
+          });
+    }
   }
 
   function desglose(select1, select2, select3) {
