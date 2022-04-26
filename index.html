@@ -44,54 +44,7 @@
 
 
   </script>
-  <!-- botones Payphone
-  -->
-  <!--
-  <script>
-                let dia = new Date();
-    window.onload = function () {
-      payphone.Button({
-
-        //token obtenido desde la consola de developer
-        token: "nSEoOvW51YPfsEGmpsu8BoSyIFTaqsGCyN8kkeOvMspw66GwExTguUV_Rcp7iD7MjYG2TCas8GpE7BgxG7gE3kFvNOAM7D75PuywWmvG_c8z2fARbd9DLFOubRbrL9BXt10GDDxQsiLRU3VvyiQtFgBeBYG9cO1wJer3Mq55LKrDtSBBnahqUmoKGdGD-YcNl3aX6YT4O3dngee36BGQLST5r6xjYQp9SZajKgtCCixS5CFIHeaH0h3g1KAqtCjBjcslT1LU-7pgZP09_084SW2iXguVE3QtUKjAGJ_jGXpjXU4pABOM8fde-TyRemyeC7534Q",
-
-        //PARÁMETROS DE CONFIGURACIÓN
-        btnHorizontal: true,
-        //btnVertical: true,
-        btnCard: true,
-
-        //Se ingresan los datos de la transaccion ej. monto, impuestos, etc
-        createOrder: function (actions) {
-          return actions.prepare({
-            amount: 100,
-            amountWithoutTax: 100,
-            currency: 'USD',
-            //let dia = New(Date);
-            clientTransactionId : dia.valueOf()+'fdspf00052'
-            //clientTransactionId: 
-          });
-        },
-        onComplete: function (model, actions) {
-
-          //Se confirma el pago realizado
-          actions.confirm({
-            id: model.id,
-            clientTxId: model.clientTxId
-          }).then(function (value) {
-
-            //EN ESTA SECCIÓN SE RECIBE LA RESPUESTA Y SE MUESTRA AL USUARIO
-            if (value.transactionStatus == "Approved") {
-              alert("Pago " + value.transactionId + " recibido, estado " + value.transactionStatus);
-            }
-          }).catch(function (err) {
-            console.log(err);
-          });
-        }
-      }).render("#pp-button");
-    }
-  </script>
-  -->
-
+ 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Pasarela de Pagos Payphone</title>
@@ -497,10 +450,13 @@
       clientTransactionId: clientTransaccion, ////id unico debe cambiar para cada transaccion
           responseUrl: "http://localhost/ButtomBasic/confirm.html",//cambiar a su url
           cancellationUrl: "http://localhost/ButtomBasic/BotonPago.html"//cambiar a su url
-  */
+  *//*
           amount: parseInt((document.getElementById('totalconiva').innerHTML) * 100),
           tax: parseInt((document.getElementById('totaliva').innerHTML) * 100),
-          amountWithTax: parseInt((document.getElementById('totalsiniva').innerHTML) * 100),
+          amountWithTax: parseInt((document.getElementById('totalsiniva').innerHTML) * 100),*/
+		 amount: amount,
+      amountWithTax: amountWithTax,
+      tax: tax,
           currency: "USD",
           clientTransactionId: transaccionid,
           responseUrl: responseUrl,
@@ -606,9 +562,12 @@
     console.log(transaccionid);
 
     var dataJson = {
-      amount: parseInt((document.getElementById('totalconiva').innerHTML) * 100),
+      /*amount: parseInt((document.getElementById('totalconiva').innerHTML) * 100),
       tax: parseInt((document.getElementById('totaliva').innerHTML) * 100),
-      amountWithTax: parseInt((document.getElementById('totalsiniva').innerHTML) * 100),
+      amountWithTax: parseInt((document.getElementById('totalsiniva').innerHTML) * 100),*/
+	     amount: amount,
+      amountWithTax: amountWithTax,
+      tax: tax,
       currency: "USD",
       clientTransactionId: transaccionid,
       responseUrl: responseUrl,
@@ -642,7 +601,9 @@
     document.getElementById('totalsiniva').innerHTML = +(((totales_productos.reduce((a, b) => a + b, 0))).toFixed(2));
     document.getElementById('totaliva').innerHTML = +(((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador).toFixed(2));
     document.getElementById('totalconiva').innerHTML = +(((totales_productos.reduce((a, b) => a + b, 0)) + ((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador)).toFixed(2));
-
+    amountWithTax = +(((totales_productos.reduce((a, b) => a + b, 0))).toFixed(2));
+    tax = +(((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador).toFixed(2));
+    amount = +(((totales_productos.reduce((a, b) => a + b, 0)) + ((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador)).toFixed(2));
   }
 
   function desglose(select1, select2, select3) {
@@ -661,6 +622,9 @@
     sel1.appendChild(p1);
     sel2.appendChild(p2);
     sel3.appendChild(p3);
+	  amountWithTax = +(((totales_productos.reduce((a, b) => a + b, 0))).toFixed(2));
+    tax = +(((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador).toFixed(2));
+    amount = +(((totales_productos.reduce((a, b) => a + b, 0)) + ((totales_productos.reduce((a, b) => a + b, 0)) * ivaEcuador)).toFixed(2));
   }
 
   function addbottones(array, select) {
